@@ -1,0 +1,44 @@
+version: '3.3'
+
+networks:
+  elk:
+
+volumes:
+  esdata1:
+    driver: local
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true      
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+       soft: -1
+       hard: -1
+    volumes:
+     - esdata1:/usr/share/elasticsearch/data
+    networks:
+      - elk
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.1.1
+    container_name: kibana
+    networks:
+      - elk
+  nginx:
+    image: nginx
+    ports:
+      - 9200:9200
+      - 5601:5601
+    networks:
+      - elk
+    volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./.htpasswd
+        target: /etc/nginx/.htpasswd
