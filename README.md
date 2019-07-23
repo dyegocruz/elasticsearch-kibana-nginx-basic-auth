@@ -1,4 +1,4 @@
-# elasticsearch-kibana-nginx-baisc-auth
+# elasticsearch-kibana-nginx-basic-auth
 Docker Compose Elasticsearch, Kibana and Nginx Auth Basic
 
 ### 1: Setting Config for Elastic ###
